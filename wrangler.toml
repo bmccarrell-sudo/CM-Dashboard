@@ -1,0 +1,8 @@
+name = "cybermagnet-crm"
+compatibility_date = "2026-07-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cybermagnet-crm"
+database_id = "REPLACE_WITH_YOUR_DATABASE_ID"
