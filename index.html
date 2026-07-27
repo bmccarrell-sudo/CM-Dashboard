@@ -634,62 +634,65 @@ const ORDERS_API   = '/api/orders';
 // the Authorization header to "log in" to the HTTP Basic session.
 // On success the API responds 200; on failure it returns 401.
 
-async function attemptLogin(user, pass) {
-  const encoded = btoa(`${user}:${pass}`);
-  try {
-    const res = await fetch(CONTACTS_API, {
-      headers: { 'Authorization': `Basic ${encoded}` }
-    });
-    if (res.ok) {
-      // Store for subsequent requests
-      sessionStorage.setItem('cm_auth', encoded);
-      return true;
-    }
-  } catch(e) {}
-  return false;
-}
+// ── SESSION AUTH ──────────────────────────────────────────────────────────────
+// Token stored in sessionStorage; sent as Bearer header on every API call.
+// Cookie is also set by the server for future use.
 
 function getAuthHeader() {
-  const stored = sessionStorage.getItem('cm_auth');
-  return stored ? { 'Authorization': `Basic ${stored}` } : {};
+  const token = sessionStorage.getItem('cm_token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+function showApp() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
 }
 
 document.getElementById('login-btn').addEventListener('click', doLogin);
 document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
 async function doLogin() {
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value;
+  const user  = document.getElementById('login-user').value.trim();
+  const pass  = document.getElementById('login-pass').value;
   const errEl = document.getElementById('login-err');
-  const btn = document.getElementById('login-btn');
+  const btn   = document.getElementById('login-btn');
   if (!user || !pass) { errEl.textContent = 'Enter your username and password.'; return; }
-  btn.textContent = 'Signing in…'; btn.disabled = true;
-  const ok = await attemptLogin(user, pass);
-  btn.textContent = 'Sign in'; btn.disabled = false;
-  if (ok) {
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('app').classList.add('visible');
-    initApp();
-  } else {
-    errEl.textContent = 'Incorrect username or password.';
-    document.getElementById('login-pass').value = '';
+  btn.textContent = 'Signing in…'; btn.disabled = true; errEl.textContent = '';
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user, pass }),
+    });
+    const data = await res.json();
+    if (res.ok && data.ok) {
+      sessionStorage.setItem('cm_token', data.token);
+      showApp();
+      initApp();
+    } else {
+      errEl.textContent = data.error || 'Incorrect username or password.';
+      document.getElementById('login-pass').value = '';
+    }
+  } catch(e) {
+    errEl.textContent = 'Connection error — please try again.';
   }
+  btn.textContent = 'Sign in'; btn.disabled = false;
 }
 
-// If already authenticated (page reload), skip login by trying a fetch
-(async function checkExistingAuth() {
-  if (sessionStorage.getItem('cm_auth')) {
-    const res = await fetch(CONTACTS_API, { headers: getAuthHeader() }).catch(()=>null);
-    if (res && res.ok) {
-      document.getElementById('login-screen').classList.add('hidden');
-      document.getElementById('app').classList.add('visible');
-      initApp();
-    }
-  }
+// Check for existing valid session on page load
+(async function checkExistingSession() {
+  const token = sessionStorage.getItem('cm_token');
+  if (!token) return;
+  try {
+    const res = await fetch(CONTACTS_API, { headers: getAuthHeader() });
+    if (res.ok) { showApp(); initApp(); return; }
+  } catch(e) {}
+  sessionStorage.removeItem('cm_token');
 })();
 
-document.getElementById('logout-btn').addEventListener('click', () => {
-  sessionStorage.removeItem('cm_auth');
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  sessionStorage.removeItem('cm_token');
+  try { await fetch('/api/logout'); } catch(e) {}
   location.reload();
 });
 
