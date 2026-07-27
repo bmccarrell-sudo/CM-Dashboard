@@ -1,12 +1,8 @@
-// Gates the entire admin dashboard behind HTTP Basic Auth.
-// Set CRM_USER and CRM_PASS as environment variables in your Cloudflare
-// Pages project: Settings → Environment variables → Production.
+// CyberMagnet Admin — HTTP Basic Auth gate
+// Set these in Cloudflare Pages: Settings → Environment variables → Production
 //
-// Credentials:
-//   CRM_USER = bmccarrell#1590
-//   CRM_PASS = CMD#1590BFM
-//
-// If either variable is unset the site is left open — set both before going live.
+//   CRM_USER = bmccarrell1590
+//   CRM_PASS = CMD1590BFM
 
 export async function onRequest({ request, env, next }) {
   const user = env.CRM_USER;
