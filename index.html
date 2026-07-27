@@ -7,35 +7,36 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#080C12">
+<meta name="theme-color" content="#0A131F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 /* ── TOKENS ─────────────────────────────────────────────────────────────── */
 :root {
-  --bg:        #080C12;
-  --bg2:       #0D1219;
-  --surface:   #111720;
-  --surface2:  #161E2A;
-  --surface3:  #1C2535;
-  --border:    #1E2A38;
-  --border2:   #253040;
-  --text:      #E4EDF8;
-  --muted:     #7A8FA8;
-  --dim:       #445566;
-  --accent:    #2DD4FF;
-  --accent-d:  rgba(45,212,255,0.12);
-  --purple:    #7C6CF0;
-  --purple-d:  rgba(124,108,240,0.14);
+  /* ── CyberMagnet brand palette ── */
+  --bg:        #080D16;
+  --bg2:       #0A1120;
+  --surface:   #0E1829;
+  --surface2:  #122033;
+  --surface3:  #172840;
+  --border:    #1C2E44;
+  --border2:   #223650;
+  --text:      #E8F0FA;
+  --muted:     #7A90AA;
+  --dim:       #3D5470;
+  --accent:    #FF7A2E;
+  --accent-d:  rgba(255,122,46,0.13);
+  --purple:    #6E8EFF;
+  --purple-d:  rgba(110,142,255,0.13);
   --green:     #35D48A;
   --green-d:   rgba(53,212,138,0.12);
   --amber:     #FFB020;
   --amber-d:   rgba(255,176,32,0.12);
   --red:       #FF5C7A;
   --red-d:     rgba(255,92,122,0.12);
-  --orange:    #FF7A00;
-  --orange-d:  rgba(255,122,0,0.12);
+  --orange:    #FF7A2E;
+  --orange-d:  rgba(255,122,46,0.13);
   --r:         10px;
   --r-sm:      7px;
   --fd:        'Space Grotesk', sans-serif;
@@ -47,7 +48,7 @@ html,body { height:100%; background:var(--bg); color:var(--text); font-family:va
 button { font-family:inherit; cursor:pointer; }
 input,select,textarea { font-family:inherit; }
 a { color:inherit; text-decoration:none; }
-::selection { background:rgba(45,212,255,0.2); color:var(--accent); }
+::selection { background:rgba(255,122,46,0.18); color:var(--accent); }
 :focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 ::-webkit-scrollbar { width:6px; height:6px; }
 ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:6px; }
@@ -59,8 +60,8 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; justify-content:center;
   background:var(--bg);
   background-image:
-    radial-gradient(circle at 20% 10%, rgba(45,212,255,0.07) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(124,108,240,0.06) 0%, transparent 50%);
+    radial-gradient(circle at 20% 10%, rgba(255,122,46,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,122,46,0.05) 0%, transparent 50%);
 }
 .login-card {
   background:var(--surface); border:1px solid var(--border2);
@@ -348,7 +349,7 @@ a { color:inherit; text-decoration:none; }
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <svg width="36" height="36" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#111720"/><path d="M20 14v20a12 12 0 0024 0V14" stroke="#2DD4FF" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="14" y="8" width="10" height="14" rx="2" fill="#2DD4FF"/><rect x="40" y="8" width="10" height="14" rx="2" fill="#2DD4FF"/></svg>
+      <svg width="48" height="48" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><rect width="180" height="180" rx="36" fill="#0A131F"/><text x="90" y="72" font-family="'Space Grotesk',sans-serif" font-size="68" font-weight="700" fill="#F0F6FF" text-anchor="middle" dominant-baseline="middle">C</text><circle cx="22" cy="95" r="7" fill="#FF7A2E"/><line x1="29" y1="95" x2="151" y2="95" stroke="#FF7A2E" stroke-width="5"/><circle cx="158" cy="95" r="7" fill="#FF7A2E"/><text x="90" y="140" font-family="'Space Grotesk',sans-serif" font-size="62" font-weight="700" fill="#FF7A2E" text-anchor="middle" dominant-baseline="middle">M</text></svg>
       <div><div>CyberMagnet</div><span>Admin Portal</span></div>
     </div>
     <div class="login-h">Welcome back</div>
@@ -364,7 +365,7 @@ a { color:inherit; text-decoration:none; }
 <div id="app">
   <div class="topbar">
     <div class="topbar-logo">
-      <svg width="26" height="26" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#111720"/><path d="M20 14v20a12 12 0 0024 0V14" stroke="#2DD4FF" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="14" y="8" width="10" height="14" rx="2" fill="#2DD4FF"/><rect x="40" y="8" width="10" height="14" rx="2" fill="#2DD4FF"/></svg>
+      <svg width="30" height="30" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg"><rect width="180" height="180" rx="36" fill="#0A131F"/><text x="90" y="72" font-family="'Space Grotesk',sans-serif" font-size="68" font-weight="700" fill="#F0F6FF" text-anchor="middle" dominant-baseline="middle">C</text><circle cx="22" cy="95" r="7" fill="#FF7A2E"/><line x1="29" y1="95" x2="151" y2="95" stroke="#FF7A2E" stroke-width="5"/><circle cx="158" cy="95" r="7" fill="#FF7A2E"/><text x="90" y="140" font-family="'Space Grotesk',sans-serif" font-size="62" font-weight="700" fill="#FF7A2E" text-anchor="middle" dominant-baseline="middle">M</text></svg>
       CyberMagnet Admin
     </div>
     <div class="topbar-right">
