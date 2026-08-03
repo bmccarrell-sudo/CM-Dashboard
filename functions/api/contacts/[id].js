@@ -1,7 +1,7 @@
 // PATCH  /api/contacts/:id  -> update one or more fields
 // DELETE /api/contacts/:id  -> delete a contact and its notes
 
-const ALLOWED_FIELDS = ['company', 'category', 'phone', 'website', 'email', 'address', 'rating', 'status'];
+const ALLOWED_FIELDS = ['company', 'category', 'phone', 'website', 'email', 'address', 'rating', 'status', 'offering', 'hours', 'owner', 'called', 'outcome'];
 
 export async function onRequestPatch({ request, env, params }) {
   try {

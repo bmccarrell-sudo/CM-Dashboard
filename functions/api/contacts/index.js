@@ -12,6 +12,11 @@ function mapContactRow(c) {
     address: c.address,
     rating: c.rating,
     status: c.status,
+    offering: c.offering,
+    hours: c.hours,
+    owner: c.owner,
+    called: c.called,
+    outcome: c.outcome,
     source: c.source,
     createdAt: c.created_at,
     updatedAt: c.updated_at,
@@ -62,6 +67,11 @@ export async function onRequestPost({ request, env }) {
         address: (r.address || '').toString().trim(),
         rating: parseFloat(r.rating) || 0,
         status: r.status || 'lead',
+        offering: (r.offering || '').toString().trim(),
+        hours: (r.hours || '').toString().trim(),
+        owner: (r.owner || '').toString().trim(),
+        called: r.called === 'yes' ? 'yes' : 'no',
+        outcome: (r.outcome || '').toString().trim(),
         source: r.source || 'manual',
         created_at: now,
         updated_at: now,
@@ -69,11 +79,12 @@ export async function onRequestPost({ request, env }) {
       if (!rec.company) continue;
 
       await env.DB.prepare(
-        `INSERT INTO contacts (id, company, category, phone, website, email, address, rating, status, source, created_at, updated_at)
-         VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`
+        `INSERT INTO contacts (id, company, category, phone, website, email, address, rating, status, offering, hours, owner, called, outcome, source, created_at, updated_at)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
       ).bind(
         rec.id, rec.company, rec.category, rec.phone, rec.website, rec.email,
-        rec.address, rec.rating, rec.status, rec.source, rec.created_at, rec.updated_at
+        rec.address, rec.rating, rec.status, rec.offering, rec.hours, rec.owner,
+        rec.called, rec.outcome, rec.source, rec.created_at, rec.updated_at
       ).run();
 
       const notes = [];
