@@ -64,6 +64,36 @@ export async function onRequestGet({ env }) {
     }
   }
 
+  // ── New CRM fields (owner/hours/offering/called/outcome) ──────────────────
+  // Added after the initial launch, so existing databases won't have these
+  // columns yet. Checks what's already there first so this step is safe to
+  // run again and again without erroring on columns that already exist.
+  try {
+    const { results: cols } = await env.DB.prepare(`PRAGMA table_info(contacts)`).all();
+    const existing = new Set(cols.map((c) => c.name));
+    const newColumns = [
+      { name: 'offering', sql: `ALTER TABLE contacts ADD COLUMN offering TEXT` },
+      { name: 'hours', sql: `ALTER TABLE contacts ADD COLUMN hours TEXT` },
+      { name: 'owner', sql: `ALTER TABLE contacts ADD COLUMN owner TEXT` },
+      { name: 'called', sql: `ALTER TABLE contacts ADD COLUMN called TEXT DEFAULT 'no'` },
+      { name: 'outcome', sql: `ALTER TABLE contacts ADD COLUMN outcome TEXT DEFAULT ''` },
+    ];
+    for (const col of newColumns) {
+      if (existing.has(col.name)) {
+        results.push({ step: `contacts.${col.name} column (already present)`, status: 'ok' });
+        continue;
+      }
+      try {
+        await env.DB.prepare(col.sql).run();
+        results.push({ step: `contacts.${col.name} column`, status: 'ok' });
+      } catch (err) {
+        results.push({ step: `contacts.${col.name} column`, status: 'error', detail: String(err) });
+      }
+    }
+  } catch (err) {
+    results.push({ step: 'contacts column check', status: 'error', detail: String(err) });
+  }
+
   const allOk = results.every(r => r.status === 'ok');
   const html = `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><title>CyberMagnet DB Setup</title>
